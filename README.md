@@ -7,6 +7,6 @@ This is the go version of a CAclient. The CAclient will send csr to the CA serve
 clone the repo 
 go get github.com/hunkeelin/klinenv
 go build -o CAclient *go
-./CAclient -h 
+./CAclient -h // for help
 ```
 
