@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	outdir       = flag.String("outdir", "", "location of the output e.g /tmp or $pwd")
+	outdir       = flag.String("Outdir", "./", "location of the output e.g /tmp or $pwd (default: currentd directory")
 	ca           = flag.String("ca", "", "location of the CA crt/pem")
 	caport       = flag.String("CAport", "2018", "the port of the CA is listening for this software")
 	rsaBits      = flag.Int("RsaBits", 2048, "RSA bits")
