@@ -35,7 +35,7 @@ func getcrt(m, host string, csr []byte) ([]byte, error) {
 	clientCertPool.AppendCertsFromPEM(clientCACert)
 	config := &tls.Config{
 		InsecureSkipVerify: false,
-		//	RootCAs:            clientCertPool,
+		RootCAs:            clientCertPool,
 	}
 	config.BuildNameToCertificate()
 	tr := &http.Transport{TLSClientConfig: config}
