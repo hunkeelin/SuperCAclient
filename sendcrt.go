@@ -26,20 +26,16 @@ func getcrt(m, host string, csr []byte) ([]byte, error) {
 	}
 
 	// Get the SystemCertPool, continue with an empty pool on error
-	rootCAs, _ := x509.SystemCertPool()
-	if rootCAs == nil {
-		rootCAs = x509.NewCertPool()
-	}
-	certs, err := ioutil.ReadFile(m)
+	clientCertPool := x509.NewCertPool()
+	clientCACert, err := ioutil.ReadFile(m)
 	if err != nil {
-		return toReturn, err
+		log.Fatal("Unable to open cert", err)
 	}
-	if ok := rootCAs.AppendCertsFromPEM(certs); !ok {
-		return toReturn, errors.New("No certs appended, using system certs only")
-	}
+
+	clientCertPool.AppendCertsFromPEM(clientCACert)
 	config := &tls.Config{
 		InsecureSkipVerify: false,
-		RootCAs:            rootCAs,
+		//	RootCAs:            clientCertPool,
 	}
 	config.BuildNameToCertificate()
 	tr := &http.Transport{TLSClientConfig: config}
