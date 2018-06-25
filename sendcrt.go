@@ -4,12 +4,18 @@ import (
 	"bytes"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
 )
+
+type respBody struct {
+	Cert         []byte `json:"cert"`
+	ChainOfTrust []byte `json:"chainoftrust"`
+}
 
 // Creates a new file upload http request with optional extra params
 func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
@@ -18,11 +24,11 @@ func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
 	return req, err
 }
 
-func getcrt(m, host string, csr []byte) ([]byte, error) {
-	var toReturn []byte
+func getcrt(m, host string, csr []byte) (*respBody, error) {
+	var p respBody
 	request, err := newfileUploadRequest(host, csr)
 	if err != nil {
-		return toReturn, err
+		return &p, err
 	}
 
 	// Get the SystemCertPool, continue with an empty pool on error
@@ -46,7 +52,7 @@ func getcrt(m, host string, csr []byte) ([]byte, error) {
 	//** end of clean up
 	resp, err := client.Do(request)
 	if err != nil {
-		return toReturn, err
+		return &p, err
 	}
 	body := &bytes.Buffer{}
 	_, err = body.ReadFrom(resp.Body)
@@ -54,9 +60,13 @@ func getcrt(m, host string, csr []byte) ([]byte, error) {
 		log.Fatal(err)
 	}
 	resp.Body.Close()
-	toReturn = body.Bytes()
+	b := body.Bytes()
 	if resp.StatusCode != 200 {
-		return toReturn, errors.New(body.String())
+		return &p, errors.New(body.String())
 	}
-	return toReturn, nil
+	err = json.Unmarshal(b, &p)
+	if err != nil {
+		log.Fatal("unable to unmarshall response")
+	}
+	return &p, nil
 }

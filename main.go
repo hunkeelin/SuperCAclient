@@ -65,10 +65,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	clientCRTFile, err := os.Create(odir + h + ".crt")
+	//clientCRTFile, err := os.Create(odir + h + ".crt")
+	clientCRTFile, err := os.OpenFile(odir+h+".crt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
 	if err != nil {
 		panic(err)
 	}
-	pem.Encode(clientCRTFile, &pem.Block{Type: "CERTIFICATE", Bytes: f})
+	pem.Encode(clientCRTFile, &pem.Block{Type: "CERTIFICATE", Bytes: f.Cert})
+	clientCRTFile.Write(f.ChainOfTrust)
 	clientCRTFile.Close()
 }
