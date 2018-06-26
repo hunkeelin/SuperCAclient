@@ -20,6 +20,7 @@ var (
 	org          = flag.String("Organization", "SQ", "Specify Organization")
 	emailAddress = flag.String("EmailAddress", "support@abc.com", "email address")
 	outname      = flag.String("outname", "", "Output file name")
+	withchain    = flag.Bool("chain", false, "With chain of turst in the cert")
 	h            string
 )
 
@@ -71,6 +72,8 @@ func main() {
 		panic(err)
 	}
 	pem.Encode(clientCRTFile, &pem.Block{Type: "CERTIFICATE", Bytes: f.Cert})
-	clientCRTFile.Write(f.ChainOfTrust)
+	if *withchain {
+		clientCRTFile.Write(f.ChainOfTrust)
+	}
 	clientCRTFile.Close()
 }
