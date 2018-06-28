@@ -19,7 +19,8 @@ type respBody struct {
 
 // Creates a new file upload http request with optional extra params
 func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
-	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(csr))
+	//	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(csr))
+	req, err := http.NewRequest("POST", uri, bytes.NewReader(csr))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	return req, err
 }
