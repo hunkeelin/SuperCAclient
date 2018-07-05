@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/pem"
 	"flag"
+	"github.com/hunkeelin/SuperCAClient/lib"
 	"github.com/hunkeelin/klinutils"
 	"github.com/hunkeelin/pki"
 	"log"
