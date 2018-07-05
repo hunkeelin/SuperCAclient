@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/pem"
 	"flag"
+	"github.com/hunkeelin/klinutils"
 	"github.com/hunkeelin/pki"
 	"log"
 	"os"
@@ -60,9 +61,9 @@ func main() {
 	pem.Encode(keyOut, key)
 	keyOut.Close()
 
-	masteraddr := getHostnameFromCert(*ca)
+	masteraddr := klinutils.GetHostnameFromCert(*ca)
 	url := "https://" + masteraddr + ":" + *caport
-	f, err := getcrt(*ca, url, csr.Bytes)
+	f, err := client.Getcrt(*ca, url, csr.Bytes)
 	if err != nil {
 		log.Fatal(err)
 	}

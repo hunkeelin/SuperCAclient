@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"bytes"
@@ -25,7 +25,7 @@ func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
 	return req, err
 }
 
-func getcrt(m, host string, csr []byte) (*respBody, error) {
+func Getcrt(m, host string, csr []byte) (*respBody, error) {
 	var p respBody
 	request, err := newfileUploadRequest(host, csr)
 	if err != nil {
