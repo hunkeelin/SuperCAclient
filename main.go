@@ -66,7 +66,7 @@ func main() {
 	url := "https://" + masteraddr + ":" + *caport
 	f, err := client.Getcrt(*ca, url, csr.Bytes)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	//clientCRTFile, err := os.Create(odir + h + ".crt")
 	clientCRTFile, err := os.OpenFile(odir+h+".crt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
