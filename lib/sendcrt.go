@@ -33,7 +33,7 @@ func Getcrtv2(m, host string, csr []byte) (*respBody, error) {
         Trust: m,
         Method: "POST",
         Headers: map[string]string{
-            "content-type":"application/x-www-form-urlencoded"
+            "content-type":"application/x-www-form-urlencoded",
         },
         BodyBytes: csr,
         TimeOut: 1500,
