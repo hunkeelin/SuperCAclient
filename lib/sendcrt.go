@@ -26,10 +26,11 @@ func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
 	return req, err
 }
 
-func Getcrtv2(m, host string, csr []byte) (*respBody, error) {
+func Getcrtv2(m,host,port string, csr []byte) (*respBody, error) {
 	var p respBody
     i := &klinreq.ReqInfo{
         Dest: host,
+        Dport: port,
         Trust: m,
         Method: "POST",
         Headers: map[string]string{
