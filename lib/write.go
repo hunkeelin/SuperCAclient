@@ -6,26 +6,25 @@ import (
     "github.com/hunkeelin/pki"
     "github.com/hunkeelin/klinutils"
 )
+func writecrtkey(w WriteInfo){
+    csr, key := klinpki.GenCSRv2(w.CSRConfig)
 
-func writecrtkey(p,ca,caport string,withchain bool,j *klinpki.CSRConfig){
-    csr, key := klinpki.GenCSRv2(j)
-
-    masteraddr := klinutils.GetHostnameFromCert(ca)
-    f, err := Getcrtv2(ca, masteraddr,caport, csr.Bytes)
+    masteraddr := klinutils.GetHostnameFromCert(w.CA)
+    f, err := Getcrtv2(w.CA, masteraddr,w.CAport, csr.Bytes)
     if err != nil {
         panic(err)
     }
     //clientCRTFile, err := os.Create(odir + h + ".crt")
-    clientCRTFile, err := os.OpenFile(p+".crt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
+    clientCRTFile, err := os.OpenFile(w.Path+".crt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
     if err != nil {
         panic(err)
     }
     pem.Encode(clientCRTFile, &pem.Block{Type: "CERTIFICATE", Bytes: f.Cert})
-    if withchain {
+    if w.Chain {
         clientCRTFile.Write(f.ChainOfTrust)
     }
     clientCRTFile.Close()
-    keyOut, err := os.OpenFile(p+".key", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+    keyOut, err := os.OpenFile(w.Path+".key", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
     if err != nil {
         panic(err)
     }

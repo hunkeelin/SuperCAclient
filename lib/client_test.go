@@ -16,5 +16,12 @@ func TestOut(t *testing.T){
         OrganizationalUnit: "IT",
         Organization:       "abc",
     }
-    writecrtkey("diu","rootca.crt","2018",false,j)
+    w := WriteInfo{
+        CA: "rootca.crt",
+        CAport: "2018",
+        Chain: false,
+        CSRConfig: j,
+        Path: "diui", 
+    }
+    writecrtkey(w)
 }
