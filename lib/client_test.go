@@ -23,5 +23,8 @@ func TestOut(t *testing.T){
         CSRConfig: j,
         Path: "diui", 
     }
-    writecrtkey(w)
+    err := Writecrtkey(w)
+    if err != nil {
+        panic(err)
+    }
 }
