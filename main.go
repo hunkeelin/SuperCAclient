@@ -1,13 +1,10 @@
 package main
 
 import (
-	"encoding/pem"
 	"flag"
 	"github.com/hunkeelin/SuperCAClient/lib"
-	"github.com/hunkeelin/klinutils"
 	"github.com/hunkeelin/pki"
 	"log"
-	"os"
 )
 
 var (
@@ -22,7 +19,7 @@ var (
 	org          = flag.String("Organization", "SQ", "Specify Organization")
 	emailAddress = flag.String("EmailAddress", "support@abc.com", "email address")
 	outname      = flag.String("outname", "", "Output file name")
-	withchain    = flag.Bool("chain", false, "With chain of turst in the cert")
+	chain        = flag.Bool("chain", false, "include chain of trust")
 	h            string
 )
 
@@ -43,39 +40,23 @@ func main() {
 	if string(odir[len(odir)-1]) != "/" {
 		odir += "/"
 	}
-	j := &klinpki.CSRConfig{
-		EmailAddress:       *emailAddress,
-		RsaBits:            *rsaBits,
-		Country:            *country,
-		Province:           *state,
-		Locality:           *city,
-		OrganizationalUnit: *orgu,
-		Organization:       *org,
+	w := client.WriteInfo{
+		CA:     *ca,
+		CAport: *caport,
+		Chain:  *chain,
+		CSRConfig: &klinpki.CSRConfig{
+			EmailAddress:       *emailAddress,
+			RsaBits:            *rsaBits,
+			Country:            *country,
+			Province:           *state,
+			Locality:           *city,
+			OrganizationalUnit: *orgu,
+			Organization:       *org,
+		},
+		Path: odir + h,
 	}
-	csr, key := klinpki.GenCSRv2(j)
-
-	// write keyfile
-	keyOut, err := os.OpenFile(odir+h+".key", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	err := client.Writecrtkeyv2(w)
 	if err != nil {
 		panic(err)
 	}
-	pem.Encode(keyOut, key)
-	keyOut.Close()
-
-	masteraddr := klinutils.GetHostnameFromCert(*ca)
-	url := "https://" + masteraddr + ":" + *caport
-	f, err := client.Getcrt(*ca, url, csr.Bytes)
-	if err != nil {
-		panic(err)
-	}
-	//clientCRTFile, err := os.Create(odir + h + ".crt")
-	clientCRTFile, err := os.OpenFile(odir+h+".crt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
-	if err != nil {
-		panic(err)
-	}
-	pem.Encode(clientCRTFile, &pem.Block{Type: "CERTIFICATE", Bytes: f.Cert})
-	if *withchain {
-		clientCRTFile.Write(f.ChainOfTrust)
-	}
-	clientCRTFile.Close()
 }
