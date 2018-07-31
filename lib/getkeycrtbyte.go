@@ -9,7 +9,7 @@ import (
 
 func Getkeycrtbyte(w WriteInfo) (crtpem []byte, keypem []byte, err error) {
 	var crt [][]byte
-	bcrt := bytes.NewBufferString("")
+	var bcrt bytes.Buffer
 	csr, key := klinpki.GenCSRv2(w.CSRConfig)
 
 	masteraddr := klinutils.GetHostnameFromCert(w.CA)
@@ -27,7 +27,7 @@ func Getkeycrtbyte(w WriteInfo) (crtpem []byte, keypem []byte, err error) {
 		}
 	}
 	for _, c := range crt {
-		pem.Encode(bcrt, &pem.Block{Type: "CERTIFICATE", Bytes: c})
+		pem.Encode(&bcrt, &pem.Block{Type: "CERTIFICATE", Bytes: c})
 	}
 	return bcrt.Bytes(), key.Bytes, nil
 }
