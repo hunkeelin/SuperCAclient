@@ -19,12 +19,14 @@ func Writecrtkeyv2(w WriteInfo) error {
 	clientCRTFile.Write(crt)
 	clientCRTFile.Close()
 
-	keyOut, err := os.OpenFile(w.Path+".key", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	clientKeyFile, err := os.OpenFile(w.Path+".key", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
 	if err != nil {
 		return err
 	}
-	pem.Encode(keyOut, &pem.Block{Type: "RSA PRIVATE KEY", Bytes: key})
-	keyOut.Close()
+	clientKeyFile.Write(key)
+	clientKeyFile.Close()
+
+	//	pem.Encode(keyOut, &pem.Block{Type: "RSA PRIVATE KEY", Bytes: key})
 	return nil
 }
 func Writecrtkey(w WriteInfo) error {

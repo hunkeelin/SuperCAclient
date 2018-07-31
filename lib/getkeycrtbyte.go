@@ -7,15 +7,15 @@ import (
 	"github.com/hunkeelin/pki"
 )
 
-func Getkeycrtbyte(w WriteInfo) (crtpem []byte, keypem []byte, err error) {
+func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 	var crt [][]byte
-	var bcrt bytes.Buffer
+	var bcrt, bkey bytes.Buffer
 	csr, key := klinpki.GenCSRv2(w.CSRConfig)
 
 	masteraddr := klinutils.GetHostnameFromCert(w.CA)
 	f, err := Getcrtv2(w.CA, masteraddr, w.CAport, csr.Bytes)
 	if err != nil {
-		return bcrt.Bytes(), key.Bytes, err
+		return bcrt.Bytes(), bkey.Bytes(), err
 	}
 	crt = append(crt, f.Cert)
 	if w.Chain {
@@ -29,5 +29,6 @@ func Getkeycrtbyte(w WriteInfo) (crtpem []byte, keypem []byte, err error) {
 	for _, c := range crt {
 		pem.Encode(&bcrt, &pem.Block{Type: "CERTIFICATE", Bytes: c})
 	}
-	return bcrt.Bytes(), key.Bytes, nil
+	pem.Encode(&bkey, &pem.Block{Type: "RSA PRIVATE KEY", Bytes: key.Bytes})
+	return bcrt.Bytes(), bkey.Bytes(), nil
 }
