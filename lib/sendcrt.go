@@ -3,10 +3,10 @@ package client
 import (
 	"bytes"
 	"crypto/tls"
-    "github.com/hunkeelin/mtls/req"
 	"crypto/x509"
 	"encoding/json"
 	"errors"
+	"github.com/hunkeelin/mtls/req"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -26,38 +26,47 @@ func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
 	return req, err
 }
 
-func Getcrtv2(m,host,port string, csr []byte) (*respBody, error) {
+type GetCrtInfo struct {
+	Ca      string
+	Host    string
+	Port    string
+	Csr     []byte
+	CaBytes []byte
+}
+
+func Getcrtv2(g GetCrtInfo) (*respBody, error) {
 	var p respBody
-    i := &klinreq.ReqInfo{
-        Dest: host,
-        Dport: port,
-        Trust: m,
-        Method: "POST",
-        Headers: map[string]string{
-            "content-type":"application/x-www-form-urlencoded",
-        },
-        BodyBytes: csr,
-        TimeOut: 1500,
-    }
-    resp, err := klinreq.SendPayload(i) 
-    if err != nil {
-        return &p,err
-    }
-    body := &bytes.Buffer{}
-    _, err = body.ReadFrom(resp.Body)
-    if err != nil {
-        panic(err)
-    }
-    resp.Body.Close()
-    b := body.Bytes()
-    if resp.StatusCode != 200 {
-        return &p, errors.New(body.String())
-    }
-    err = json.Unmarshal(b, &p)
-    if err != nil {
-        panic(err)
-    }
-    return &p, nil
+	i := &klinreq.ReqInfo{
+		Dest:       g.Host,
+		Dport:      g.Port,
+		Trust:      g.Ca,
+		TrustBytes: g.CaBytes,
+		Method:     "POST",
+		Headers: map[string]string{
+			"content-type": "application/x-www-form-urlencoded",
+		},
+		BodyBytes: g.Csr,
+		TimeOut:   1500,
+	}
+	resp, err := klinreq.SendPayload(i)
+	if err != nil {
+		return &p, err
+	}
+	body := &bytes.Buffer{}
+	_, err = body.ReadFrom(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	resp.Body.Close()
+	b := body.Bytes()
+	if resp.StatusCode != 200 {
+		return &p, errors.New(body.String())
+	}
+	err = json.Unmarshal(b, &p)
+	if err != nil {
+		panic(err)
+	}
+	return &p, nil
 }
 func Getcrt(m, host string, csr []byte) (*respBody, error) {
 	var p respBody
