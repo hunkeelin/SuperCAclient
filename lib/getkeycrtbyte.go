@@ -20,6 +20,9 @@ func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 		Csr:     csr.Bytes,
 		CaBytes: w.CABytes,
 	}
+	if w.CAName != "" {
+		g.Ca = w.CAName
+	}
 	f, err := Getcrtv2(g)
 	if err != nil {
 		return bcrt.Bytes(), bkey.Bytes(), err
