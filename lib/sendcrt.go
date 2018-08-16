@@ -8,7 +8,6 @@ import (
 	"errors"
 	"github.com/hunkeelin/mtls/req"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -55,7 +54,7 @@ func Getcrtv2(g GetCrtInfo) (*respBody, error) {
 	body := &bytes.Buffer{}
 	_, err = body.ReadFrom(resp.Body)
 	if err != nil {
-		panic(err)
+		return &p, err
 	}
 	resp.Body.Close()
 	b := body.Bytes()
@@ -64,7 +63,7 @@ func Getcrtv2(g GetCrtInfo) (*respBody, error) {
 	}
 	err = json.Unmarshal(b, &p)
 	if err != nil {
-		panic(err)
+		return &p, err
 	}
 	return &p, nil
 }
@@ -79,7 +78,7 @@ func Getcrt(m, host string, csr []byte) (*respBody, error) {
 	clientCertPool := x509.NewCertPool()
 	clientCACert, err := ioutil.ReadFile(m)
 	if err != nil {
-		log.Fatal("Unable to open cert", err)
+		return &p, err
 	}
 
 	clientCertPool.AppendCertsFromPEM(clientCACert)
@@ -101,7 +100,7 @@ func Getcrt(m, host string, csr []byte) (*respBody, error) {
 	body := &bytes.Buffer{}
 	_, err = body.ReadFrom(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return &p, err
 	}
 	resp.Body.Close()
 	b := body.Bytes()
@@ -110,7 +109,7 @@ func Getcrt(m, host string, csr []byte) (*respBody, error) {
 	}
 	err = json.Unmarshal(b, &p)
 	if err != nil {
-		log.Fatal("unable to unmarshall response")
+		return &p, err
 	}
 	return &p, nil
 }
