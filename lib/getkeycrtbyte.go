@@ -12,7 +12,7 @@ func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 	var crt [][]byte
 	var bcrt, bkey bytes.Buffer
 	csr, key := klinpki.GenCSRv2(w.CSRConfig)
-	if w.CA == "" && len(CaBytes) == 0 {
+	if w.CA == "" && len(CABytes) == 0 {
 		return bcrt.Bytes(), bkey.Bytes(), errors.New("Please specify CA in bytes or give the location of the CA")
 	}
 	g := GetCrtInfo{
