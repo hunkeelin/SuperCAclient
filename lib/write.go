@@ -37,11 +37,11 @@ func Writecrtkey(w WriteInfo) error {
 		return err
 	}
 	g := GetCrtInfo{
-		Ca:      w.CA,
+		CA:      w.CA,
 		Host:    masteraddr,
 		Port:    w.CAport,
 		Csr:     csr.Bytes,
-		CaBytes: w.CABytes,
+		CABytes: w.CABytes,
 	}
 	f, err := Getcrtv2(g)
 	if err != nil {

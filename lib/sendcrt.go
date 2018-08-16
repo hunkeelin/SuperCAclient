@@ -26,11 +26,11 @@ func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
 }
 
 type GetCrtInfo struct {
-	Ca      string
+	CA      string
 	Host    string
 	Port    string
 	Csr     []byte
-	CaBytes []byte
+	CABytes []byte
 }
 
 func Getcrtv2(g GetCrtInfo) (*respBody, error) {
@@ -38,8 +38,8 @@ func Getcrtv2(g GetCrtInfo) (*respBody, error) {
 	i := &klinreq.ReqInfo{
 		Dest:       g.Host,
 		Dport:      g.Port,
-		Trust:      g.Ca,
-		TrustBytes: g.CaBytes,
+		Trust:      g.CA,
+		TrustBytes: g.CABytes,
 		Method:     "POST",
 		Headers: map[string]string{
 			"content-type": "application/x-www-form-urlencoded",

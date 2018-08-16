@@ -12,14 +12,14 @@ func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 	var crt [][]byte
 	var bcrt, bkey bytes.Buffer
 	csr, key := klinpki.GenCSRv2(w.CSRConfig)
-	if w.CA == "" && len(w.CaBytes) == 0 {
+	if w.CA == "" && len(w.CABytes) == 0 {
 		return bcrt.Bytes(), bkey.Bytes(), errors.New("Please specify CA in bytes or give the location of the CA")
 	}
 	g := GetCrtInfo{
-		Ca:      w.CA,
+		CA:      w.CA,
 		Port:    w.CAport,
 		Csr:     csr.Bytes,
-		CaBytes: w.CABytes,
+		CABytes: w.CABytes,
 	}
 	if w.CA != "" {
 		masteraddr, err := klinutils.GetHostnameFromCertv2(w.CA)
