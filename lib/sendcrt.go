@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"errors"
-	"github.com/hunkeelin/mtls/req"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -35,7 +34,7 @@ type GetCrtInfo struct {
 
 func Getcrtv2(g GetCrtInfo) (*respBody, error) {
 	var p respBody
-	i := &klinreq.ReqInfo{
+	i := &ReqInfo{
 		Dest:       g.Host,
 		Dport:      g.Port,
 		Trust:      g.CA,
@@ -47,7 +46,7 @@ func Getcrtv2(g GetCrtInfo) (*respBody, error) {
 		BodyBytes: g.Csr,
 		TimeOut:   1500,
 	}
-	resp, err := klinreq.SendPayload(i)
+	resp, err := SendPayload(i)
 	if err != nil {
 		return &p, err
 	}
