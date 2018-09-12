@@ -2,14 +2,10 @@ package client
 
 import (
 	"bytes"
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"github.com/hunkeelin/klinutils"
-	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 type respBody struct {
