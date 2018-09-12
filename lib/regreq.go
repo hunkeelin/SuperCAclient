@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type ReqInfo struct {
+type reqInfo struct {
 	Cert               string // The cert for mtls
 	Key                string // The key for mtls
 	CertBytes          []byte // same as cert but in bytes will overwrite Cert
@@ -32,7 +32,7 @@ type ReqInfo struct {
 }
 
 // Send a json payload. payload should be a struct where you define your json
-func SendPayload(i *ReqInfo) (*http.Response, error) {
+func sendPayload(i *reqInfo) (*http.Response, error) {
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	var resp *http.Response
 	var cert tls.Certificate

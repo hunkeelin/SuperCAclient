@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/pem"
 	"errors"
-	"github.com/hunkeelin/klinutils"
 	"github.com/hunkeelin/pki"
 )
 
@@ -15,25 +14,7 @@ func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 	if w.CA == "" && len(w.CABytes) == 0 {
 		return bcrt.Bytes(), bkey.Bytes(), errors.New("Please specify CA in bytes or give the location of the CA")
 	}
-	g := GetCrtInfo{
-		CA:      w.CA,
-		Port:    w.CAport,
-		Csr:     csr.Bytes,
-		CABytes: w.CABytes,
-	}
-	if w.CA != "" {
-		masteraddr, err := klinutils.GetHostnameFromCertv2(w.CA)
-		if err != nil {
-			return bcrt.Bytes(), bkey.Bytes(), err
-		}
-		g.Host = masteraddr
-	} else {
-		if w.CAName == "" {
-			return bcrt.Bytes(), bkey.Bytes(), errors.New("Please specify name of the CA")
-		}
-		g.Host = w.CAName
-	}
-	f, err := Getcrtv2(g)
+	f, err := getcrtv2(w, csr.Bytes)
 	if err != nil {
 		return bcrt.Bytes(), bkey.Bytes(), err
 	}

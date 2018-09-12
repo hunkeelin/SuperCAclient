@@ -20,12 +20,16 @@ func TestOut(t *testing.T) {
 	w := WriteInfo{
 		CA:        "rootca.crt",
 		CAport:    "2018",
-		Chain:     true,
+		CAName:    "test1.klin-pro.com",
+		Chain:     false,
 		CSRConfig: j,
 		Path:      "diui",
+		//		SignCA:    "noob",
 	}
-	err := Writecrtkeyv2(w)
+	c, k, err := Getkeycrtbyte(w)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(string(c))
+	fmt.Println(string(k))
 }

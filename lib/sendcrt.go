@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"errors"
+	"github.com/hunkeelin/klinutils"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -24,29 +25,35 @@ func newfileUploadRequest(uri string, csr []byte) (*http.Request, error) {
 	return req, err
 }
 
-type GetCrtInfo struct {
-	CA      string
-	Host    string
-	Port    string
-	Csr     []byte
-	CABytes []byte
-}
-
-func Getcrtv2(g GetCrtInfo) (*respBody, error) {
+func getcrtv2(g WriteInfo, csrbytes []byte) (*respBody, error) {
 	var p respBody
-	i := &ReqInfo{
-		Dest:       g.Host,
-		Dport:      g.Port,
+	var dest string
+	if g.CA != "" {
+		masteraddr, err := klinutils.GetHostnameFromCertv2(g.CA)
+		if err != nil {
+			return &p, err
+		}
+		dest = masteraddr
+	} else {
+		if g.CAName == "" {
+			return &p, errors.New("Please specify name of the CA")
+		}
+		dest = g.CAName
+	}
+	i := &reqInfo{
+		Dest:       dest,
+		Dport:      g.CAport,
 		Trust:      g.CA,
 		TrustBytes: g.CABytes,
 		Method:     "POST",
 		Headers: map[string]string{
 			"content-type": "application/x-www-form-urlencoded",
+			"SignCA":       g.SignCA,
 		},
-		BodyBytes: g.Csr,
+		BodyBytes: csrbytes,
 		TimeOut:   1500,
 	}
-	resp, err := SendPayload(i)
+	resp, err := sendPayload(i)
 	if err != nil {
 		return &p, err
 	}
