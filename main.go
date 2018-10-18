@@ -2,9 +2,10 @@ package main
 
 import (
 	"flag"
-	"github.com/hunkeelin/SuperCAClient/lib"
+	"github.com/hunkeelin/SuperCAclient/lib"
 	"github.com/hunkeelin/pki"
 	"log"
+	"os"
 )
 
 var (
@@ -53,10 +54,24 @@ func main() {
 			OrganizationalUnit: *orgu,
 			Organization:       *org,
 		},
-		Path: odir + h,
+		Path:   odir + h,
+		SignCA: "test",
 	}
-	err := client.Writecrtkeyv2(w)
+	crt, key, err := client.Getkeycrtbyte(w)
 	if err != nil {
 		panic(err)
 	}
+	clientCRTFile, err := os.OpenFile(w.Path+".crt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
+	if err != nil {
+		panic(err)
+	}
+
+	clientKeyFile, err := os.OpenFile(w.Path+".key", os.O_WRONLY|os.O_CREATE|os.O_TRUNC|os.O_APPEND, 0644)
+	if err != nil {
+		panic(err)
+	}
+	clientCRTFile.Write(crt)
+	clientCRTFile.Close()
+	clientKeyFile.Write(key)
+	clientKeyFile.Close()
 }
