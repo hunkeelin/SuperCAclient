@@ -22,6 +22,7 @@ var (
 	outname      = flag.String("outname", "", "Output file name")
 	chain        = flag.Bool("chain", false, "include chain of trust")
 	h            string
+	Signca       = flag.String("Signca", "", "the ca to sign your request")
 )
 
 func main() {
@@ -55,7 +56,7 @@ func main() {
 			Organization:       *org,
 		},
 		Path:   odir + h,
-		SignCA: "test",
+		SignCA: *Signca,
 	}
 	crt, key, err := client.Getkeycrtbyte(w)
 	if err != nil {
