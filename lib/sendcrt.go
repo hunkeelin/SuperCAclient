@@ -47,7 +47,7 @@ func getcrtv2(g WriteInfo, csrbytes []byte) (*respBody, error) {
 			"SignCA":       g.SignCA,
 		},
 		BodyBytes: csrbytes,
-		TimeOut:   1500,
+		TimeOut:   5000,
 	}
 	resp, err := sendPayload(i)
 	if err != nil {
