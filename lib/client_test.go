@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+	"github.com/hunkeelin/klinutils"
 	"github.com/hunkeelin/pki"
 	"testing"
 )
@@ -19,7 +20,7 @@ func TestOut(t *testing.T) {
 	}
 	w := WriteInfo{
 		CA:        "rootca.crt",
-		CAport:    "2018",
+		CAport:    klinutils.Stringtoport("superca"),
 		CAName:    "test1.klin-pro.com",
 		Chain:     false,
 		CSRConfig: j,

@@ -14,7 +14,7 @@ func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 	if w.CA == "" && len(w.CABytes) == 0 {
 		return bcrt.Bytes(), bkey.Bytes(), errors.New("Please specify CA in bytes or give the location of the CA")
 	}
-	f, err := getcrtv2(w, csr.Bytes)
+	f, err := getcrt(w, csr.Bytes)
 	if err != nil {
 		return bcrt.Bytes(), bkey.Bytes(), err
 	}

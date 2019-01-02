@@ -83,7 +83,7 @@ func sendPayload(i *reqInfo) (*http.Response, error) {
 		Transport: tr,
 	}
 	if i.TimeOut == 0 {
-		client.Timeout = time.Duration(500) * time.Millisecond
+		client.Timeout = time.Duration(1500) * time.Millisecond
 	} else {
 		client.Timeout = time.Duration(i.TimeOut) * time.Millisecond
 	}
