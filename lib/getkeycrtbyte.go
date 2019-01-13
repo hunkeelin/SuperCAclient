@@ -16,7 +16,7 @@ func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 	}
 	f, err := getcrt(w, csr.Bytes)
 	if err != nil {
-		return bcrt.Bytes(), bkey.Bytes(), err
+		return bcrt.Bytes(), bkey.Bytes(), fmt.Errorf("unable to getcrt from ca")
 	}
 	crt = append(crt, f.Cert)
 	if w.Chain {
