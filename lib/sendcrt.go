@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/hunkeelin/klinutils"
 )
 
@@ -66,7 +67,7 @@ func getcrt(g WriteInfo, csrbytes []byte) (*respBody, error) {
 	if g.CA != "" {
 		masteraddr, err := klinutils.GetHostnameFromCertv2(g.CA)
 		if err != nil {
-			return &p, err
+			return &p, fmt.Errorf("unable to get masteraddr from cert %v", err)
 		}
 		dest = masteraddr
 	} else {
@@ -95,12 +96,12 @@ func getcrt(g WriteInfo, csrbytes []byte) (*respBody, error) {
 	body := &bytes.Buffer{}
 	_, err = body.ReadFrom(resp.Body)
 	if err != nil {
-		return &p, err
+		return &p, fmt.Errorf("unable to readfrom respond body %v", err)
 	}
 	resp.Body.Close()
 	b := body.Bytes()
 	if resp.StatusCode != 200 {
-		return &p, errors.New(body.String())
+		return &p, fmt.Errorf("CA server is not giving the cert back")
 	}
 	err = json.Unmarshal(b, &p)
 	if err != nil {

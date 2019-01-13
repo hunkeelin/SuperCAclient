@@ -21,7 +21,7 @@ func TestOut(t *testing.T) {
 	w := WriteInfo{
 		CA:        "rootca.crt",
 		CAport:    klinutils.Stringtoport("superca"),
-		CAName:    "test1.klin-pro.com",
+		CAName:    "util3.klin-pro.com",
 		Chain:     false,
 		CSRConfig: j,
 		Path:      "diui",
