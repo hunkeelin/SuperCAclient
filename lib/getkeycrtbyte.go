@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"github.com/hunkeelin/pki"
 )
 
