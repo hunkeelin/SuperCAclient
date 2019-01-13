@@ -13,10 +13,12 @@ func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
 	var bcrt, bkey bytes.Buffer
 	csr, key := klinpki.GenCSRv2(w.CSRConfig)
 	if w.CA == "" && len(w.CABytes) == 0 {
+		fmt.Println("fck")
 		return bcrt.Bytes(), bkey.Bytes(), errors.New("Please specify CA in bytes or give the location of the CA")
 	}
 	f, err := getcrt(w, csr.Bytes)
 	if err != nil {
+		fmt.Println("you")
 		return bcrt.Bytes(), bkey.Bytes(), fmt.Errorf("unable to getcrt from ca")
 	}
 	crt = append(crt, f.Cert)
