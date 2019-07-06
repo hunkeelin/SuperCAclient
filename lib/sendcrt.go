@@ -99,7 +99,7 @@ func getcrt(g WriteInfo, csrbytes []byte) (*respBody, error) {
 	if err != nil {
 		return &p, fmt.Errorf("unable to readfrom respond body %v", err)
 	}
-	resp.Body.Close()
+	defer resp.Body.Close()
 	bbody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)
@@ -107,6 +107,8 @@ func getcrt(g WriteInfo, csrbytes []byte) (*respBody, error) {
 
 	b := body.Bytes()
 	if resp.StatusCode != 200 {
+		fmt.Println("this is status code", resp.StatusCode)
+		fmt.Println("this is body")
 		fmt.Println(string(bbody))
 		return &p, fmt.Errorf("CA server is not giving the cert back")
 	}
