@@ -13,4 +13,6 @@ type WriteInfo struct {
 	CAName    string             // Hostname of the CA. it will default to the hostname from the CA certs if this is left blank
 	CSRConfig *klinpki.CSRConfig // import github.com/hunkeelin/pki and read the godocs
 	SignCA    string
+	Csr       []byte
+	Key       []byte
 }

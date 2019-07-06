@@ -10,13 +10,13 @@ import (
 func TestOut(t *testing.T) {
 	fmt.Println("testing Out")
 	j := &klinpki.CSRConfig{
-		EmailAddress:       "support@abc.com",
+		EmailAddress:       "support@varomoney.com",
 		RsaBits:            2048,
 		Country:            "USA",
-		Province:           "SHIT",
-		Locality:           "NOOB",
+		Locality:           "SF",
 		OrganizationalUnit: "IT",
-		Organization:       "abc",
+		Organization:       "VARO",
+		DNSNames:           []string{"6F11ABD8D1207DACC2357D2DBF6F222.yl4.us-west-2.eks.amazonaws.com"},
 	}
 	w := WriteInfo{
 		CA:        "rootca.crt",
@@ -24,8 +24,7 @@ func TestOut(t *testing.T) {
 		CAName:    "util3.klin-pro.com",
 		Chain:     false,
 		CSRConfig: j,
-		Path:      "diui",
-		//		SignCA:    "noob",
+		SignCA:    "intermca",
 	}
 	c, k, err := Getkeycrtbyte(w)
 	if err != nil {
