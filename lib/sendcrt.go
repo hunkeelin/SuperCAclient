@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hunkeelin/klinutils"
-	"io/ioutil"
 )
 
 type respBody struct {
@@ -100,16 +99,8 @@ func getcrt(g WriteInfo, csrbytes []byte) (*respBody, error) {
 		return &p, fmt.Errorf("unable to readfrom respond body %v", err)
 	}
 	defer resp.Body.Close()
-	bbody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-
 	b := body.Bytes()
 	if resp.StatusCode != 200 {
-		fmt.Println("this is status code", resp.StatusCode)
-		fmt.Println("this is body")
-		fmt.Println(string(bbody))
 		return &p, fmt.Errorf("CA server is not giving the cert back")
 	}
 	err = json.Unmarshal(b, &p)
