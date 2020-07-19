@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 	"github.com/hunkeelin/SuperCAclient/lib"
-	"github.com/hunkeelin/pki"
+	"github.com/hunkeelin/klinutils"
+	"github.com/hunkeelin/pki/v1"
 	"log"
 	"os"
 )
@@ -11,7 +12,7 @@ import (
 var (
 	outdir       = flag.String("Outdir", "./", "location of the output e.g /tmp or $pwd (default: currentd directory")
 	ca           = flag.String("ca", "", "location of the CA crt/pem")
-	caport       = flag.String("CAport", "2018", "the port of the CA is listening for this software")
+	caport       = flag.String("CAport", klinutils.Stringtoport("superca"), "the port of the CA is listening for this software")
 	rsaBits      = flag.Int("RsaBits", 2048, "RSA bits")
 	country      = flag.String("Country", "USA", "Specify Country")
 	state        = flag.String("State", "CA", "Specify state")
