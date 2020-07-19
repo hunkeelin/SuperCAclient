@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/hunkeelin/pki"
+	"github.com/hunkeelin/pki/v1"
 )
 
 type WriteInfo struct {

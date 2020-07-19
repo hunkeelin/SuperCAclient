@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/pem"
 	"errors"
-	"github.com/hunkeelin/pki"
+	"github.com/hunkeelin/pki/v1"
 )
 
 func Getkeycrtbyte(w WriteInfo) (crtpem, keypem []byte, err error) {
